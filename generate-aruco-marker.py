@@ -14,7 +14,7 @@ print(marker.dtype, marker.shape)
 
 pad = size // 8
 padded = cv2.copyMakeBorder(marker, pad, pad, pad, pad, cv2.BORDER_CONSTANT, value=(255,255,255))
-cv2.imwrite(f"marker_{id}_{size}.png", padded)
+cv2.imwrite(f"markers/marker_{id}_{size}.png", padded)
 
 while True:
     cv2.imshow("marker", marker)
