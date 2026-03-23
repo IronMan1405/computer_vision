@@ -20,34 +20,35 @@ def findAruco(img, size=6, totalMarkers=250, draw=True):
     return [corners, ids]
 
 def augmentAruco(corners, ids, img, augImg, drawId=True):
-    topleft = corners[0][0][0], corners[0][0][1]
-    topright = corners[0][1][0], corners[0][1][1]
-    bottomright = corners[0][2][0], corners[0][2][1]
-    bottomleft = corners[0][3][0], corners[0][3][1]
+    if ids is not None:
+        topleft = corners[0][0][0], corners[0][0][1]
+        topright = corners[0][1][0], corners[0][1][1]
+        bottomright = corners[0][2][0], corners[0][2][1]
+        bottomleft = corners[0][3][0], corners[0][3][1]
 
-    border = np.array([topleft, topright, bottomright, bottomleft])
+        border = np.array([topleft, topright, bottomright, bottomleft])
 
-    h, w, c = img.shape
-    augH, augW, augC = augImg.shape
+        h, w, c = img.shape
+        augH, augW, augC = augImg.shape
 
-    imgpts = np.array([[0, 0], [augW, 0], [augW, augH], [0, augH]])
+        imgpts = np.array([[0, 0], [augW, 0], [augW, augH], [0, augH]])
 
-    matrix, _ = cv2.findHomography(imgpts, border)
+        matrix, _ = cv2.findHomography(imgpts, border)
 
-    imgOut = cv2.warpPerspective(augImg, matrix, (w, h))
+        imgOut = cv2.warpPerspective(augImg, matrix, (w, h))
+        cv2.fillConvexPoly(img, border.astype(int), (0,0,0))
+        imgOut = img + imgOut
 
-    cv2.fillConvexPoly(img, border.astype(int), (0,0,0))
-
-    imgOut = img + imgOut
-
-    return imgOut
+        if drawId:
+            cv2.putText(imgOut, f"id: {ids}", (int(topleft[0]), int(topleft[1])), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 255), 2)
+                
+        return imgOut
 
 
 
 def main():
     cap = cv2.VideoCapture(0)
 
-    augImg = cv2.imread('assets/Oreki-1.jpeg')
     
     while True:
         success, img = cap.read()
@@ -59,6 +60,9 @@ def main():
 
         if len(aruco[0]) != 0:
             for corners, ids in zip(aruco[0], aruco[1]):
+                marker_id = int(ids)
+                augImg = cv2.imread(f'assets/{marker_id}.jpeg')
+                
                 img = augmentAruco(corners, ids, img, augImg)
                 # augmentAruco(corners, ids, img, augImg)
 

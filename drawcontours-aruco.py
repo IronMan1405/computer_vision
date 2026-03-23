@@ -39,8 +39,6 @@ def drawArucoContours(corners, ids, img):
 
 def main():
     cap = cv2.VideoCapture(0)
-
-    augImg = cv2.imread('assets/Oreki-1.jpeg')
     
     while True:
         success, img = cap.read()
