@@ -1,6 +1,7 @@
 import cv2
 import cv2.aruco as aruco
 import numpy as np
+import os
 
 def findAruco(img, size=6, totalMarkers=250, draw=True):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -44,7 +45,19 @@ def augmentAruco(corners, ids, img, augImg, drawId=True):
                 
         return imgOut
 
+def loadImages(path):
+    dict = os.listdir(path)
+    n = len(dict)
 
+    augDict = {}
+
+    for imgpath in dict:
+        key = int(os.path.splitext(imgpath)[0])
+        print(key)
+        augImg = cv2.imread(f'{path}/{key}.jpeg')
+        augDict[key] = augImg
+
+    return augDict
 
 def main():
     cap = cv2.VideoCapture(0)
@@ -52,6 +65,8 @@ def main():
     
     while True:
         success, img = cap.read()
+
+        augDict = loadImages('assets')
 
         if not success:
             break
@@ -61,10 +76,10 @@ def main():
         if len(aruco[0]) != 0:
             for corners, ids in zip(aruco[0], aruco[1]):
                 marker_id = int(ids)
-                augImg = cv2.imread(f'assets/{marker_id}.jpeg')
-                
-                img = augmentAruco(corners, ids, img, augImg)
-                # augmentAruco(corners, ids, img, augImg)
+                if marker_id in augDict:
+                    # augImg = cv2.imread(f'assets/{marker_id}.jpeg')
+                    augImg = augDict[marker_id]
+                    img = augmentAruco(corners, ids, img, augImg)
 
         cv2.imshow("cam", img)
 
