@@ -1,23 +1,7 @@
 import cv2
 import cv2.aruco as aruco
 import numpy as np
-
-def findAruco(img, size=6, totalMarkers=250, draw=True):
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    arucoDict = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
-    arucoParams = aruco.DetectorParameters()
-    detector = aruco.ArucoDetector(arucoDict, arucoParams)
-
-    corners, ids, rejected = detector.detectMarkers(gray)
-
-    if ids is not None:
-        if draw:
-            aruco.drawDetectedMarkers(img, corners, ids)
-    else:
-        cv2.putText(img, "no marker detected", (10, 100), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 3, (0, 255, 0), 2)
-
-    return [corners, ids]
+from find_aruco_marker import findAruco
 
 def drawArucoContours(corners, ids, img):
     if ids is not None:
