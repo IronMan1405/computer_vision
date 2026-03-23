@@ -53,7 +53,6 @@ def loadImages(path):
 
     for imgpath in dict:
         key = int(os.path.splitext(imgpath)[0])
-        print(key)
         augImg = cv2.imread(f'{path}/{key}.jpeg')
         augDict[key] = augImg
 
@@ -76,7 +75,7 @@ def main():
         if len(aruco[0]) != 0:
             for corners, ids in zip(aruco[0], aruco[1]):
                 marker_id = int(ids)
-                if marker_id in augDict:
+                if marker_id in augDict.keys():
                     # augImg = cv2.imread(f'assets/{marker_id}.jpeg')
                     augImg = augDict[marker_id]
                     img = augmentAruco(corners, ids, img, augImg)
