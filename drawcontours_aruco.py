@@ -4,6 +4,15 @@ import numpy as np
 from find_aruco_marker import findAruco
 
 def drawArucoContours(corners, ids, img):
+    '''
+    :param corners: corners of detected aruco marker
+    :param ids: id of detected aruco marker
+    :param img: source image with detected aruco marker
+    :return: none
+    '''
+    
+    
+    
     if ids is not None:
         for i, id in enumerate(ids):
             markerCorners = corners[i][0]
