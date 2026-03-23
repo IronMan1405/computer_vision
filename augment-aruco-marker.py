@@ -53,7 +53,7 @@ def loadImages(path):
 
     for imgpath in dict:
         key = int(os.path.splitext(imgpath)[0])
-        augImg = cv2.imread(f'{path}/{key}.jpeg')
+        augImg = cv2.imread(f'{path}/{imgpath}')
         augDict[key] = augImg
 
     return augDict
@@ -61,11 +61,10 @@ def loadImages(path):
 def main():
     cap = cv2.VideoCapture(0)
 
+    augDict = loadImages('assets')
     
     while True:
         success, img = cap.read()
-
-        augDict = loadImages('assets')
 
         if not success:
             break
@@ -74,7 +73,7 @@ def main():
 
         if len(aruco[0]) != 0:
             for corners, ids in zip(aruco[0], aruco[1]):
-                marker_id = int(ids)
+                marker_id = int(ids.item())
                 if marker_id in augDict.keys():
                     # augImg = cv2.imread(f'assets/{marker_id}.jpeg')
                     augImg = augDict[marker_id]
