@@ -4,9 +4,20 @@ import numpy as np
 import os
 
 def findAruco(img, size=6, totalMarkers=250, draw=True):
+    '''
+    :param img: source image in which to search for aruco markers
+    :param size: no. of columns/rows of the aruco marker to detect
+    :param totalMarkers: no. of markers in the dictionary
+    :param draw: whether to draw contours, pivot, and marker id on detected marker
+    :return: list of [corners, ids]
+    '''
+
+
+
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    arucoDict = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
+    key = getattr(aruco, f"DICT_{size}X{size}_{totalMarkers}")
+    arucoDict = aruco.getPredefinedDictionary(key)
     arucoParams = aruco.DetectorParameters()
     detector = aruco.ArucoDetector(arucoDict, arucoParams)
 
@@ -21,6 +32,17 @@ def findAruco(img, size=6, totalMarkers=250, draw=True):
     return [corners, ids]
 
 def augmentAruco(corners, ids, img, augImg, drawId=True):
+    '''
+    :param corners: corners of the aruco markers
+    :param ids: ids of the aruco markers
+    :param img: source image/video capture
+    :param augImg: image to be augmented on the marker
+    :param drawId: whether to show the id of the marker on the source
+    :return: image matrix of the format of source image
+    '''
+
+
+
     if ids is not None:
         topleft = corners[0][0][0], corners[0][0][1]
         topright = corners[0][1][0], corners[0][1][1]
@@ -46,6 +68,13 @@ def augmentAruco(corners, ids, img, augImg, drawId=True):
         return imgOut
 
 def loadImages(path):
+    '''
+    :param path: path in which images are stored with ids as names
+    :return: dictionary of images present in the folder with key as id and value as image path
+    '''
+
+
+
     dict = os.listdir(path)
     n = len(dict)
 
@@ -75,7 +104,6 @@ def main():
             for corners, ids in zip(aruco[0], aruco[1]):
                 marker_id = int(ids.item())
                 if marker_id in augDict.keys():
-                    # augImg = cv2.imread(f'assets/{marker_id}.jpeg')
                     augImg = augDict[marker_id]
                     img = augmentAruco(corners, ids, img, augImg)
 
