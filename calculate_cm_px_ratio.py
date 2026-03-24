@@ -49,11 +49,9 @@ def main():
                     drawArucoContours([corner], [marker_id], img)
                     apparentSideLength = calculateLength(marker_id, corner)
                     ratio = calculateRatio(actualSideLength, apparentSideLength)
-        
 
         cv2.putText(img, f"{apparentSideLength: .2f} px", (20, 150), cv2.FONT_HERSHEY_PLAIN, 3, (255,0,0), 2)
         cv2.putText(img, f"cm to pixel ratio: {ratio: .2f}", (10, 200), cv2.FONT_HERSHEY_PLAIN, 3, (255,0,255), 2)
-        
 
         cv2.imshow("capture", img)
         
