@@ -14,7 +14,7 @@ def main():
         if not success:
             break
 
-        img = cv2.resize(img, (320, 240), interpolation=cv2.INTER_LINEAR)
+        img = cv2.resize(img, (640, 480), interpolation=cv2.INTER_LINEAR)
 
         img_blur = cv2.GaussianBlur(img, (7, 7), 0)
 
