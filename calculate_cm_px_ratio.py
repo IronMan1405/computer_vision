@@ -20,10 +20,11 @@ def calculateLength(id, corner):
 
     l = math.sqrt(dx ** 2 + dy ** 2)
 
-    p = cv2.arcLength(corner, True)
-    l1 = p/4
+    # p = cv2.arcLength(corner, True)
+    # l1 = p/4
 
-    return l1
+    # return l1
+    return l
 
 def calculateRatio(actualLength, apparentLength):
     '''
