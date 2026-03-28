@@ -25,10 +25,11 @@ def drawArucoContours(corners, ids, img):
             border = np.array([topleft, topright, bottomleft, bottomright], dtype=np.int32)
 
             cv2.drawContours(img, [border], -1, (0,255,0), 2)
+            cv2.circle(img, border[0], 3, (255,0,0), 2)
+
     
     else:
         return
-
 
 def main():
     cap = cv2.VideoCapture(0)

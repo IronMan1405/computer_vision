@@ -30,24 +30,16 @@ def findAruco(img, size=6, totalMarkers=250, draw=True):
     return [corners, ids]
 
 def main():
-    cap = cv2.VideoCapture(1)
-    cap2 = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0)
 
     while True:
         success, img = cap.read()
 
-        s2, img2 = cap2.read()
-
         if not success:
             break
-        if not s2:
-            break
         
-        findAruco(img)
-        # cv2.imshow("cam", img)
-
-        findAruco(img2)
-        cv2.imshow("cam2", img2)
+        [corners, ids] = findAruco(img)
+        cv2.imshow("cam", img)
     
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):

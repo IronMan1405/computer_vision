@@ -2,6 +2,7 @@ import cv2
 from find_aruco_marker import findAruco
 from drawcontours_aruco import drawArucoContours
 import math
+import numpy as np
 
 
 actualSideLength = 4.7 #cm
@@ -19,7 +20,10 @@ def calculateLength(id, corner):
 
     l = math.sqrt(dx ** 2 + dy ** 2)
 
-    return l
+    p = cv2.arcLength(corner, True)
+    l1 = p/4
+
+    return l1
 
 def calculateRatio(actualLength, apparentLength):
     '''
@@ -50,9 +54,10 @@ def main():
                     apparentSideLength = calculateLength(marker_id, corner)
                     ratio = calculateRatio(actualSideLength, apparentSideLength)
 
-        cv2.putText(img, f"{apparentSideLength: .2f} px", (10, 15), cv2.FONT_HERSHEY_PLAIN, 1, (255,0,0), 2)
-        cv2.putText(img, f"cm to pixel ratio: {ratio: .2f}", (10, 30), cv2.FONT_HERSHEY_PLAIN, 1, (255,0,255), 2)
-        # cv2.putText(img, f"{apparentSideLength * ratio:.2f}", (int(corner[0][0][0]), int(corner[0][0][1])), cv2.FONT_HERSHEY_PLAIN, 1, (0,255,0), 2)
+            cv2.putText(img, f"{apparentSideLength * ratio:.2f}", (int(corners[0][0][0][0]), int(corners[0][0][0][1]) - 10), cv2.FONT_HERSHEY_PLAIN, 2, (0,255,0), 2)
+        
+        cv2.putText(img, f"{apparentSideLength: .2f} px", (10, 15), cv2.FONT_HERSHEY_PLAIN, 2, (255,0,0), 2)
+        cv2.putText(img, f"cm to pixel ratio: {ratio: .2f}", (10, 30), cv2.FONT_HERSHEY_PLAIN, 2, (255,0,255), 2)
 
         cv2.imshow("capture", img)
         
